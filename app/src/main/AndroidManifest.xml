@@ -27,7 +27,6 @@
 
         <activity
             android:name=".activity.MainActivity2"
-            android:label="@string/title_activity_main2"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,7 +36,14 @@
         </activity>
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.HistoryRead_Activity" />
-        <activity android:name=".activity.ChonChuyenMuc"></activity>
+        <activity android:name=".activity.ChonChuyenMuc" />
+        <activity
+            android:name=".activity.SettingsActivity2"
+            android:label="@string/title_activity_settings2" />
+        <activity android:name=".activity.DangKyActivity" />
+        <activity android:name=".activity.ThongTinCaNhanActivity" />
+        <activity android:name=".activity.SearchActivity" />
+        <activity android:name=".activity.TinTucActivity"></activity>
     </application>
 
 </manifest>

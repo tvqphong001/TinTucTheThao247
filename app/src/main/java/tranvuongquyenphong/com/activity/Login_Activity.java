@@ -38,7 +38,7 @@ import tranvuongquyenphong.com.model.Users;
 
 public class Login_Activity extends AppCompatActivity {
     EditText username,password;
-    Button btnLogin;
+    Button btnLogin,btnRegister;
     CallbackManager callbackManager;
     LoginButton btnLoginButton;
     private DatabaseReference mDatabase;
@@ -49,34 +49,34 @@ public class Login_Activity extends AppCompatActivity {
 
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-        if (accessToken!=null)
-        {
-            GraphRequest request = GraphRequest.newMeRequest(
-                    accessToken,
-                    new GraphRequest.GraphJSONObjectCallback() {
-                        @Override
-                        public void onCompleted(JSONObject object, GraphResponse response) {
-                            Log.d("Json",response.getJSONObject().toString());
-                            Users users = null;
-                            try {
-                                String email = object.getString("email");
-                                String birthday = object.getString("birthday");
-                                String name = object.getString("name");
-                                String id = object.getString("id");
-                                users = new Users(email,birthday,name,id);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            Intent intent = new Intent(Login_Activity.this,MainActivity2.class);
-                            intent.putExtra("object_fb",users);
-                            startActivity(intent);
-                        }
-                    });
-            Bundle parameters = new Bundle();
-            parameters.putString("fields", "email,birthday,name,id");
-            request.setParameters(parameters);
-            request.executeAsync();
-        }
+//        if (accessToken!=null)
+//        {
+//            GraphRequest request = GraphRequest.newMeRequest(
+//                    accessToken,
+//                    new GraphRequest.GraphJSONObjectCallback() {
+//                        @Override
+//                        public void onCompleted(JSONObject object, GraphResponse response) {
+//                            Log.d("Json",response.getJSONObject().toString());
+//                            Users users = null;
+//                            try {
+//                                String email = object.getString("email");
+//                                String birthday = object.getString("birthday");
+//                                String name = object.getString("name");
+//                                String id = object.getString("id");
+//                                users = new Users(email,birthday,name,id);
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                            Intent intent = new Intent(Login_Activity.this,MainActivity2.class);
+//                            intent.putExtra("object_fb",users);
+//                            startActivity(intent);
+//                        }
+//                    });
+//            Bundle parameters = new Bundle();
+//            parameters.putString("fields", "email,birthday,name,id");
+//            request.setParameters(parameters);
+//            request.executeAsync();
+//        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login1);
 
@@ -115,7 +115,7 @@ public class Login_Activity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Intent intent = new Intent(Login_Activity.this,MainActivity.class);
+                        Intent intent = new Intent(Login_Activity.this,MainActivity2.class);
                         intent.putExtra("object_fb",users);
                         startActivity(intent);
                     }
@@ -145,38 +145,47 @@ public class Login_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // get data user
-                Toast.makeText(Login_Activity.this, "DangNhap", Toast.LENGTH_SHORT).show();
-                mDatabase.child("User").addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        Users users = dataSnapshot.getValue(Users.class);
-                        if (username.getText().toString().equals(users.getUsername())&&password.getText().toString().equals(users.getPassword()))
-                        {
-                            Intent intent = new Intent(Login_Activity.this,MainActivity2.class);
-                            startActivity(intent);
-                        }
-                    }
-
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                Intent intent = new Intent(Login_Activity.this,MainActivity2.class);
+                startActivity(intent);
+//                Toast.makeText(Login_Activity.this, "DangNhap", Toast.LENGTH_SHORT).show();
+//                mDatabase.child("User").addChildEventListener(new ChildEventListener() {
+//                    @Override
+//                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                        Users users = dataSnapshot.getValue(Users.class);
+//                        if (username.getText().toString().equals(users.getUsername())&&password.getText().toString().equals(users.getPassword()))
+//                        {
+//                            Intent intent = new Intent(Login_Activity.this,MainActivity2.class);
+//                            startActivity(intent);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                    }
+//                });
+            }
+        });
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Login_Activity.this,DangKyActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -186,6 +195,7 @@ public class Login_Activity extends AppCompatActivity {
         password = findViewById(R.id.password);
         username = findViewById(R.id.username);
         btnLogin = findViewById(R.id.btnlogin);
+        btnRegister = findViewById(R.id.btnRegister);
 
     }
 

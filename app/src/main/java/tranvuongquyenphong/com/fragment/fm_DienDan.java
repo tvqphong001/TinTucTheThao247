@@ -16,13 +16,14 @@ import tranvuongquyenphong.com.activity.MainActivity2;
 import tranvuongquyenphong.com.activity.TinTucActivity;
 import tranvuongquyenphong.com.adapter.NewsAdapter;
 
-public class fm_TinDaThich extends Fragment {
+public class fm_DienDan extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View myView = inflater.inflate(R.layout.fm_tindathich, container, false);
+        View myView = inflater.inflate(R.layout.fm_diendan, container, false);
         return myView;
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

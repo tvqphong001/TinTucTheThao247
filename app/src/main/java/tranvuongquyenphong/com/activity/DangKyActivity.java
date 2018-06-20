@@ -7,12 +7,12 @@ import android.view.MenuItem;
 
 import tranvuongquyenphong.com.R;
 
-public class ChonChuyenMuc extends AppCompatActivity {
+public class DangKyActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chon_chuyen_muc);
+        setContentView(R.layout.activity_dang_ky_thanh_vien);
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
             actionBar.setTitle(getResources().getString(R.string.app_name));

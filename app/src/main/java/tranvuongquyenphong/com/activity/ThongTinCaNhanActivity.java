@@ -7,12 +7,12 @@ import android.view.MenuItem;
 
 import tranvuongquyenphong.com.R;
 
-public class ChonChuyenMuc extends AppCompatActivity {
+public class ThongTinCaNhanActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chon_chuyen_muc);
+        setContentView(R.layout.activity_thong_tin_ca_nhan);
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
             actionBar.setTitle(getResources().getString(R.string.app_name));
@@ -29,4 +29,5 @@ public class ChonChuyenMuc extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 }

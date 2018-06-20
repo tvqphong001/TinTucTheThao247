@@ -76,11 +76,12 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Login"
+                android:text="Dang Nhap"
                 android:textStyle="bold"
                 android:textColor="#FFF"
                 android:background="#ce0808"
                 />
+
             <com.facebook.login.widget.LoginButton
                 android:id="@+id/login_button"
                 android:layout_width="match_parent"
@@ -88,6 +89,10 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="30dp" />
+
+
+
+
 
         </LinearLayout>
     </ScrollView>

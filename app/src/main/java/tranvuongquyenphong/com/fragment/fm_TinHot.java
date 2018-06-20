@@ -1,10 +1,9 @@
 package tranvuongquyenphong.com.fragment;
-
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +15,11 @@ import tranvuongquyenphong.com.activity.MainActivity2;
 import tranvuongquyenphong.com.activity.TinTucActivity;
 import tranvuongquyenphong.com.adapter.NewsAdapter;
 
-public class fm_TinDaThich extends Fragment {
+public class fm_TinHot extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View myView = inflater.inflate(R.layout.fm_tindathich, container, false);
+        View myView = inflater.inflate(R.layout.fm_tinhot, container, false);
         return myView;
     }
     @Override

@@ -8,11 +8,31 @@
     tools:context=".activity.MainActivity2"
     tools:showIn="@layout/app_bar_main2">
 
-    <FrameLayout
-        android:id="@+id/content_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
+    <!--<FrameLayout-->
+        <!--android:id="@+id/content_frame"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FF17D148"
+                app:tabMode="scrollable"
+                app:tabGravity="fill">
+
+            </android.support.design.widget.TabLayout>
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewPager"
+                android:layout_below="@+id/tabLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </android.support.v4.view.ViewPager>
+        </RelativeLayout>
+    <!--</FrameLayout>-->
     <!--<ListView-->
         <!--android:id="@+id/list_tintuc"-->
         <!--android:layout_width="match_parent"-->
