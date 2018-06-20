@@ -15,10 +15,10 @@ import tranvuongquyenphong.com.model.TheLoai;
 
 public class GetDataBase {
 
+    public static ArrayList<TheLoai> list = new ArrayList<>();
     public static ArrayList<TheLoai> getListTheLoai()
     {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        final ArrayList<TheLoai> list = new ArrayList<>();
         mDatabase.child("TheLoai").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {

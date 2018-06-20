@@ -8,10 +8,16 @@
     tools:context=".activity.MainActivity2"
     tools:showIn="@layout/app_bar_main2">
 
-    <ListView
-        android:id="@+id/list_tintuc"
+    <FrameLayout
+        android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+    </FrameLayout>
+    <!--<ListView-->
+        <!--android:id="@+id/list_tintuc"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
 
-    </ListView>
+    <!--</ListView>-->
+
 </LinearLayout>

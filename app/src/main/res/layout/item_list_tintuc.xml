@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <!--<ImageView-->
-                <!--android:src="@drawable/seen"-->
+                <!--android:src="@drawable/ic_eyes"-->
                 <!--android:layout_width="20dp"-->
                 <!--android:layout_height="20dp" />-->
             </LinearLayout>
@@ -69,11 +69,12 @@
                     android:layout_height="wrap_content"
                     android:text="bl" />
 
+
                 <!--<ImageView-->
                     <!--android:id="@+id/imageView2"-->
                     <!--android:layout_width="15dp"-->
                     <!--android:layout_height="20dp"-->
-                    <!--android:src="@drawable/comment2" />-->
+                    <!--android:src="@drawable/comment" />-->
             </LinearLayout>
 
         </LinearLayout>
