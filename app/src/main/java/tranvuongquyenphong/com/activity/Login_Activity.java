@@ -96,6 +96,7 @@ public class Login_Activity extends AppCompatActivity {
 //        btnLoginButton.setFragment(this);
         btnLoginButton.setReadPermissions(Arrays.asList("public_profile","email","user_birthday"));
 
+
         btnLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -117,6 +118,7 @@ public class Login_Activity extends AppCompatActivity {
                         }
                         Intent intent = new Intent(Login_Activity.this,MainActivity2.class);
                         intent.putExtra("object_fb",users);
+                        intent.putExtra("Trangthaidangnhap",1);
                         startActivity(intent);
                     }
                 });

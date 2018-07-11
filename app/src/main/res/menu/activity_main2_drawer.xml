@@ -6,12 +6,15 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_Home"
+            android:icon="@drawable/ic_home_black_24dp"
             android:title="Trang chủ" />
         <item
             android:id="@+id/nav_thongtincanhan"
+            android:icon="@drawable/ic_info_black_24dp"
             android:title="Thông tin cá nhân" />
         <item
             android:id="@+id/nav_chonchuyenmuc"
+            android:icon="@drawable/ic_dashboard_black_24dp"
             android:title="Chọn Chuyên Mục" />
         <item
             android:id="@+id/nav_setting"
@@ -19,9 +22,11 @@
             android:title="Cài đặt" />
         <item
             android:id="@+id/nav_history_new_save"
+            android:icon="@drawable/ic_history"
             android:title="Xem lịch sử đọc" />
         <item
             android:id="@+id/nav_logout"
+            android:icon="@drawable/com_facebook_button_login_logo"
             android:title="Đăng xuất" />
     </group>
 

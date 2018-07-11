@@ -1,7 +1,17 @@
 package tranvuongquyenphong.com.model;
 
 public class TheLoai{
-    String id,ten,urlHinh;
+    String id, tenLoai, link, nguontin;
+
+    public TheLoai(String id, String tenLoai, String link, String nguontin) {
+        this.id = id;
+        this.tenLoai = tenLoai;
+        this.link = link;
+        this.nguontin = nguontin;
+    }
+
+    public TheLoai() {
+    }
 
     public String getId() {
         return id;
@@ -11,28 +21,27 @@ public class TheLoai{
         this.id = id;
     }
 
-    public String getTen() {
-        return ten;
+    public String getTenLoai() {
+        return tenLoai;
     }
 
-    public void setTen(String ten) {
-        this.ten = ten;
+    public void setTenLoai(String tenLoai) {
+        this.tenLoai = tenLoai;
     }
 
-    public String getUrlHinh() {
-        return urlHinh;
+    public String getLink() {
+        return link;
     }
 
-    public void setUrlHinh(String urlHinh) {
-        this.urlHinh = urlHinh;
+    public void setLink(String link) {
+        this.link = link;
     }
 
-    public TheLoai() {
+    public String getNguontin() {
+        return nguontin;
     }
 
-    public TheLoai(String id, String ten, String urlHinh) {
-        this.id = id;
-        this.ten = ten;
-        this.urlHinh = urlHinh;
+    public void setNguontin(String nguontin) {
+        this.nguontin = nguontin;
     }
 }

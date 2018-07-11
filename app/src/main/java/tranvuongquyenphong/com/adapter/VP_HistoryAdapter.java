@@ -5,14 +5,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
 
-import tranvuongquyenphong.com.fragment.fm_DocGanDay;
-import tranvuongquyenphong.com.fragment.fm_TinDaLuu;
+import tranvuongquyenphong.com.fragment.Frament_History.fm_DocGanDay;
+import tranvuongquyenphong.com.fragment.Frament_History.fm_TinDaLuu;
 import tranvuongquyenphong.com.fragment.fm_TinDaThich;
 
 public class VP_HistoryAdapter extends FragmentPagerAdapter {
-    private String fragments[] = {"Doc gan day", "Tin da luu","Tin da thich"};
+    private String fragments[] = {"Doc gan day", "Tin da luu"};
     public VP_HistoryAdapter(FragmentManager supportFragmentManager, Context applicationContext) {
         super(supportFragmentManager);
     }
@@ -25,8 +24,6 @@ public class VP_HistoryAdapter extends FragmentPagerAdapter {
                 return new fm_DocGanDay();
             case 1:
                 return new fm_TinDaLuu();
-            case 2:
-                return new fm_TinDaThich();
             default:
                 return null;
 
@@ -35,7 +32,7 @@ public class VP_HistoryAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 
     @Nullable

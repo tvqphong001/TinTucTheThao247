@@ -1,11 +1,14 @@
 package tranvuongquyenphong.com.activity;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -14,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import tranvuongquyenphong.com.R;
+import tranvuongquyenphong.com.adapter.TinTucAdapter;
 
 public class SearchActivity extends AppCompatActivity {
     ArrayList<String> arrayList;
@@ -34,6 +38,39 @@ public class SearchActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(SearchActivity.this,android.R.layout.simple_list_item_1,arrayList);
         listView.setAdapter(adapter);
 
+
+        // test
+        TinTucAdapter adapter;
+        ListView ListTinTuc;
+        ListTinTuc = findViewById(R.id.listSearch);
+        ListTinTuc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(),TinTucActivity.class);
+                //intent.putExtra("link",listtin.get(position).getLink());
+                intent.putExtra("link",MainActivity2.listTrangChu.get(position).getLink());
+                startActivity(intent);
+            }
+        });
+
+//        final SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.lay_Refresh);
+//        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,R.color.colorPrimaryDark,R.color.colorAccent);
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                swipeRefreshLayout.setRefreshing(true);
+//                (new Handler()).postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        swipeRefreshLayout.setRefreshing(false);
+//                        Refresh();
+//                    }
+//                },300);
+//            }
+//        });
+
+        adapter = new TinTucAdapter(this,R.layout.item_list_tintucc,MainActivity2.listTrangChu);
+        ListTinTuc.setAdapter(adapter);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

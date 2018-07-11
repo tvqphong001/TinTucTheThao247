@@ -2,11 +2,14 @@ package tranvuongquyenphong.com.activity;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -30,39 +33,59 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import tranvuongquyenphong.com.R;
 import tranvuongquyenphong.com.adapter.VP_MainAdapter;
 import tranvuongquyenphong.com.adapter.NewsAdapter;
 import tranvuongquyenphong.com.model.News;
 import tranvuongquyenphong.com.model.TheLoai;
+import tranvuongquyenphong.com.model.TinTuc;
 import tranvuongquyenphong.com.model.Users;
+import tranvuongquyenphong.com.util.FormatHelper;
+import tranvuongquyenphong.com.util.GetDataBase;
+import tranvuongquyenphong.com.util.XMLDOMParser;
 
 public class MainActivity2 extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    ListView ListTinTuc;
     public static ArrayList<News> ListNews;
-    NewsAdapter adapter;
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     ImageView imvUser;
-    TextView txtNameUser, txtEmailUser;
-    ArrayList<TheLoai> listTheLoai;
+    TextView txtNameUser;
+    public static ArrayList<TheLoai> listTheLoai;
     Button nav_head_btnLogin;
-    AccessToken accessToken = AccessToken.getCurrentAccessToken();
     int TrangThaiDangNhap;
     TabLayout tabLayout;
     ViewPager viewPager;
+    public static ArrayList<TinTuc> listTrangChu;
+    public static ArrayList<TinTuc> listThoiSu;
+    public static ArrayList<TinTuc> listGiaiTri;
+    public static ArrayList<TinTuc> listGiaoDuc;
+    public static ArrayList<TinTuc> listTheThao;
+    public static ArrayList<TinTuc> listSucKhoe;
+    public static ArrayList<TinTuc> listCongNghe;
+    public static ArrayList<TinTuc> listVideo;
+    ArrayList<TinTuc> lisTrungGian;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        listTheLoai = new ArrayList<>();
-        TrangThaiDangNhap = 0;
-//        getListTheLoai();
-//        Toast.makeText(this, String.valueOf(listTheLoai.size()), Toast.LENGTH_SHORT).show();
+        addConTrolss();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -82,54 +105,184 @@ public class MainActivity2 extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        //addConTrols(navigationView);
-        View hview = navigationView.inflateHeaderView(R.layout.nav_header_main2);
-        nav_head_btnLogin = hview.findViewById(R.id.nav_head_btnLogin);
-        addConTrolss();
+//        View hview = navigationView.inflateHeaderView(R.layout.nav_header_main2);
+//        nav_head_btnLogin = hview.findViewById(R.id.nav_head_btnLogin);
+//        imvUser = hview.findViewById(R.id.imvUser);
+//        txtNameUser = hview.findViewById(R.id.txtNameUser);
+
+        setViewPager();
         addEvents();
-        setdataTinTuc();
     }
-    private void setdataTinTuc() {
-        News news1 = new News("1","Tinh Hinh The gioi", "123", "250","20/3/27","123","the gioi dang co nhung dien bien...","https://www.facebook.com/photo.php?fbid=1467375573375508&set=a.100888520024227.1537.100003092374700&type=3&theater");
-        News news2 = new News("2","Hoang Sa truong sa ","444","213","12/3/2015","21","Hoang sa truong sa la cua viet nam","https://www.facebook.com/profile.php?id=100002856345630");
-        News news3 = new News("3","Khong so cho","33","21","42/3/133","123","Tinh hinh trom cho hien nay dang dien bien phuc tap","https://scontent.fsgn5-4.fna.fbcdn.net/v/t1.0-9/13921020_2069406656618392_3435404849346958726_n.jpg?_nc_cat=0&oh=51631ab306af094e95af0ea8eaadcebe&oe=5BAD3010");
-        News news4 = new News("1","Tinh Hinh The gioi", "123", "250","20/3/27","123","the gioi dang co nhung dien bien...","https://www.facebook.com/photo.php?fbid=1467375573375508&set=a.100888520024227.1537.100003092374700&type=3&theater");
-        News news5 = new News("2","Hoang Sa truong sa ","444","213","12/3/2015","21","Hoang sa truong sa la cua viet nam","https://www.facebook.com/profile.php?id=100002856345630");
-        News news6 = new News("3","Khong so cho","33","21","42/3/133","123","Tinh hinh trom cho hien nay dang dien bien phuc tap","https://scontent.fsgn5-4.fna.fbcdn.net/v/t1.0-9/13921020_2069406656618392_3435404849346958726_n.jpg?_nc_cat=0&oh=51631ab306af094e95af0ea8eaadcebe&oe=5BAD3010");
-        News news7 = new News("1","Tinh Hinh The gioi", "123", "250","20/3/27","123","the gioi dang co nhung dien bien...","https://www.facebook.com/photo.php?fbid=1467375573375508&set=a.100888520024227.1537.100003092374700&type=3&theater");
-        News news8 = new News("2","Hoang Sa truong sa ","444","213","12/3/2015","21","Hoang sa truong sa la cua viet nam","https://www.facebook.com/profile.php?id=100002856345630");
-        News news9 = new News("3","Khong so cho","33","21","42/3/133","123","Tinh hinh trom cho hien nay dang dien bien phuc tap","https://scontent.fsgn5-4.fna.fbcdn.net/v/t1.0-9/13921020_2069406656618392_3435404849346958726_n.jpg?_nc_cat=0&oh=51631ab306af094e95af0ea8eaadcebe&oe=5BAD3010");
-        News news10 = new News("1","Tinh Hinh The gioi", "123", "250","20/3/27","123","the gioi dang co nhung dien bien...","https://www.facebook.com/photo.php?fbid=1467375573375508&set=a.100888520024227.1537.100003092374700&type=3&theater");
-        News news11 = new News("2","Hoang Sa truong sa ","444","213","12/3/2015","21","Hoang sa truong sa la cua viet nam","https://www.facebook.com/profile.php?id=100002856345630");
-        News news12 = new News("3","Khong so cho","33","21","42/3/133","123","Tinh hinh trom cho hien nay dang dien bien phuc tap","https://scontent.fsgn5-4.fna.fbcdn.net/v/t1.0-9/13921020_2069406656618392_3435404849346958726_n.jpg?_nc_cat=0&oh=51631ab306af094e95af0ea8eaadcebe&oe=5BAD3010");
-        ListNews.add(news1);
-        ListNews.add(news2);
-        ListNews.add(news3);
-        ListNews.add(news4);
-        ListNews.add(news5);
-        ListNews.add(news6);
-        ListNews.add(news7);
-        ListNews.add(news8);
-        ListNews.add(news9);
-        ListNews.add(news10);
-        ListNews.add(news11);
-        ListNews.add(news12);
 
-
-
-    }
-    private void addEvents() {
-        if (TrangThaiDangNhap == 0) {
-            nav_head_btnLogin.setVisibility(View.VISIBLE);
-        } else {
-            nav_head_btnLogin.setVisibility(View.INVISIBLE);
-        }
-        nav_head_btnLogin.setOnClickListener(new View.OnClickListener() {
+    private void setViewPager() {
+        viewPager = findViewById(R.id.viewPager);
+        viewPager.setAdapter(new VP_MainAdapter(getSupportFragmentManager(), getApplicationContext()));
+        tabLayout = findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity2.this, Login_Activity.class));
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
             }
         });
+    }
+
+    public ArrayList<TinTuc> setDataApp(String TheLoai) {
+        lisTrungGian.clear();
+        for (int i = 0; i < listTheLoai.size(); i++) {
+            if (listTheLoai.get(i).getTenLoai().equals(TheLoai)) {
+                if (listTheLoai.get(i).getNguontin().equals("Thanh Niên")) {
+                    final String link = listTheLoai.get(i).getLink();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new ReadDataThanhNien().execute(link);
+                        }
+                    });
+                }
+                if (listTheLoai.get(i).getNguontin().equals("VnExpress")) {
+                    final String link = listTheLoai.get(i).getLink();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new ReadDataVNEpress().execute(link);
+                        }
+                    });
+                }
+                if (listTheLoai.get(i).getNguontin().equals("VietNamNet")) {
+                    final String link = listTheLoai.get(i).getLink();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new ReadDataVietNamNet().execute(link);
+                        }
+                    });
+                }
+            }
+        }
+        return lisTrungGian;
+    }
+
+    private void setDataTheLoai() {
+
+        TheLoai theLoai = new TheLoai("001", "Trang Chủ", "https://vnexpress.net/rss/tin-moi-nhat.rss", "VnExpress");
+        TheLoai theLoai1 = new TheLoai("002", "Trang Chủ", "https://thanhnien.vn/rss/home.rss", "Thanh Niên");
+        TheLoai theLoai2 = new TheLoai("003", "Trang Chủ", "http://vietnamnet.vn/rss/home.rss", "VietNamNet");
+
+        TheLoai theLoai3 = new TheLoai("004", "Thời Sự", "https://vnexpress.net/rss/thoi-su.rss", "VnExpress");
+        TheLoai theLoai4 = new TheLoai("005", "Thời Sự", "https://thanhnien.vn/rss/viet-nam.rss", "Thanh Niên");
+        TheLoai theLoai5 = new TheLoai("006", "Thời Sự", "http://vietnamnet.vn/rss/thoi-su.rss", "VietNamNet");
+
+        TheLoai theLoai6 = new TheLoai("007", "Giải Trí", "https://vnexpress.net/rss/giai-tri.rss", "VnExpress");
+        TheLoai theLoai7 = new TheLoai("008", "Giải Trí", "https://game.thanhnien.vn/rss/home.rss", "Thanh Niên");
+        TheLoai theLoai8 = new TheLoai("009", "Giải Trí", "http://vietnamnet.vn/rss/giai-tri.rss", "VietNamNet");
+
+        TheLoai theLoai9 = new TheLoai("010", "Giáo Dục", "https://vnexpress.net/rss/giao-duc.rss", "VnExpress");
+        TheLoai theLoai10 = new TheLoai("011", "Giáo Dục", "https://thanhnien.vn/rss/giao-duc.rss", "Thanh Niên");
+        TheLoai theLoai11 = new TheLoai("012", "Giáo Dục", "http://vietnamnet.vn/rss/giao-duc.rss", "VietNamNet");
+
+        TheLoai theLoai12 = new TheLoai("012", "Thể Thao", "https://vnexpress.net/rss/the-thao.rss", "VnExpress");
+        TheLoai theLoai13 = new TheLoai("013", "Thể Thao", "https://thethao.thanhnien.vn/rss/home.rss", "Thanh Niên");
+        TheLoai theLoai14 = new TheLoai("014", "Thể Thao", "http://vietnamnet.vn/rss/the-thao.rss", "VietNamNet");
+
+        TheLoai theLoai15 = new TheLoai("015", "Sức Khỏe", "https://vnexpress.net/rss/suc-khoe.rss", "VnExpress");
+        TheLoai theLoai16 = new TheLoai("016", "Sức Khỏe", "https://thanhnien.vn/rss/doi-song/suc-khoe.rss", "Thanh Niên");
+        TheLoai theLoai17 = new TheLoai("017", "Sức Khỏe", "http://vietnamnet.vn/rss/suc-khoe.rss", "VietNamNet");
+
+        TheLoai theLoai18 = new TheLoai("018", "Công Nghệ", "https://vnexpress.net/rss/so-hoa.rss", "VnExpress");
+        TheLoai theLoai19 = new TheLoai("019", "Công Nghệ", "https://thanhnien.vn/rss/cong-nghe-thong-tin.rss", "Thanh Niên");
+        TheLoai theLoai20 = new TheLoai("020", "Công Nghệ", "http://vietnamnet.vn/rss/cong-nghe.rss", "VietNamNet");
+
+        TheLoai theLoai21 = new TheLoai("021", "Video", "https://video.thanhnien.vn/rss/home.rss", "Thanh Niên");
+        TheLoai theLoai22 = new TheLoai("022", "Video", "https://xe.thanhnien.vn/rss/clip.rss", "Thanh Niên");
+        //TheLoai theLoai23 = new TheLoai("023","Video","http://vietnamnet.vn/rss/suc-khoe.rss","VietNamNet");
+        listTheLoai.add(theLoai);
+        listTheLoai.add(theLoai1);
+        listTheLoai.add(theLoai2);
+        listTheLoai.add(theLoai3);
+        listTheLoai.add(theLoai4);
+        listTheLoai.add(theLoai5);
+        listTheLoai.add(theLoai6);
+        listTheLoai.add(theLoai7);
+        listTheLoai.add(theLoai8);
+        listTheLoai.add(theLoai9);
+        listTheLoai.add(theLoai10);
+        listTheLoai.add(theLoai11);
+        listTheLoai.add(theLoai12);
+        listTheLoai.add(theLoai13);
+        listTheLoai.add(theLoai14);
+        listTheLoai.add(theLoai15);
+        listTheLoai.add(theLoai16);
+        listTheLoai.add(theLoai17);
+        listTheLoai.add(theLoai18);
+        listTheLoai.add(theLoai19);
+        listTheLoai.add(theLoai20);
+        listTheLoai.add(theLoai21);
+        listTheLoai.add(theLoai22);
+
+    }
+
+    public void setDataTab() {
+
+
+        String p1 = "Trang Chủ";
+        String p2 = "Thời Sự";
+        String p3 = "Giải Trí";
+        String p4 = "Giáo Dục";
+        String p5 = "Thể Thao";
+        String p6 = "Sức Khỏe";
+        String p7 = "Công Nghệ";
+        String p8 = "Video";
+        VP_MainAdapter.listFragment = new ArrayList<>();
+        VP_MainAdapter.listFragment.add(p1);
+        VP_MainAdapter.listFragment.add(p2);
+        VP_MainAdapter.listFragment.add(p3);
+        VP_MainAdapter.listFragment.add(p4);
+        VP_MainAdapter.listFragment.add(p5);
+        VP_MainAdapter.listFragment.add(p6);
+        VP_MainAdapter.listFragment.add(p7);
+        VP_MainAdapter.listFragment.add(p8);
+    }
+
+
+    private void addEvents() {
+//        if (TrangThaiDangNhap == 0) {
+//            nav_head_btnLogin.setVisibility(View.VISIBLE);
+//        } else {
+//            nav_head_btnLogin.setVisibility(View.INVISIBLE);
+//        }
+//        nav_head_btnLogin.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(MainActivity2.this, Login_Activity.class));
+//            }
+//        });
+//        final SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.layout_Refresh);
+//        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,R.color.colorPrimaryDark,R.color.colorAccent);
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                swipeRefreshLayout.setRefreshing(true);
+//                (new Handler()).postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        swipeRefreshLayout.setRefreshing(false);
+//                        setDataTrangChu();
+//                        setViewPager();
+//                    }
+//                },300);
+//            }
+//        });
     }
 
     private void addConTrols(NavigationView navigationView) {
@@ -144,8 +297,8 @@ public class MainActivity2 extends AppCompatActivity
     public void getListTheLoai() {
         final ArrayList<TheLoai> list = new ArrayList<>();
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        TheLoai theLoai = new TheLoai("123", "543", "123");
-        mDatabase.child("TheLoai").push().setValue(theLoai);
+        //TheLoai theLoai = new TheLoai("123", "543", "123");
+        //mDatabase.child("TheLoai").push().setValue(theLoai);
         mDatabase.child("TheLoai").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -175,76 +328,46 @@ public class MainActivity2 extends AppCompatActivity
         });
 
     }
-
     private void addConTrolss() {
-        // ListTinTuc = findViewById(R.id.list_tintuc);
-        ListNews = new ArrayList<>();
-        // adapter = new NewsAdapter(MainActivity2.this,R.layout.item_list_tintuc,ListNews);
-        viewPager = findViewById(R.id.viewPager);
-        viewPager.setAdapter(new VP_MainAdapter(getSupportFragmentManager(), getApplicationContext()));
-        tabLayout = findViewById(R.id.tabLayout);
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
+        setDataUser();
+        listTheLoai = new ArrayList<>();
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
+        lisTrungGian = new ArrayList<>();
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-        });
-        //getdata_tintuc();
+        listTrangChu = new ArrayList<>();
+        listThoiSu = new ArrayList<>();
+        listGiaiTri = new ArrayList<>();
+        listGiaoDuc = new ArrayList<>();
+        listTheThao = new ArrayList<>();
+        listSucKhoe = new ArrayList<>();
+        listCongNghe = new ArrayList<>();
+        listVideo = new ArrayList<>();
+
+        TrangThaiDangNhap = 0;
+        setDataTab();
+        setDataTheLoai();
+        listTrangChu = setDataApp("Trang Chủ");
+        listThoiSu = setDataApp("Thời Sự");
+        listGiaiTri = setDataApp("Giải Trí");
+        listGiaoDuc = setDataApp("Giáo Dục");
+        listTheThao= setDataApp("Thể Thao");
+        listSucKhoe = setDataApp("Sức Khỏe");
+        listCongNghe = setDataApp("Công Nghệ");
+        listVideo = setDataApp("Video");
 
     }
 
     private void setDataUser() {
-        if (accessToken != null) {
+        Intent intent = getIntent();
+        TrangThaiDangNhap = intent.getIntExtra("Trangthaidangnhap", 0);
+        if (TrangThaiDangNhap == 1) {
             Users users = (Users) getIntent().getSerializableExtra("object_fb");
             String profilePicUrl = "https://graph.facebook.com/" + users.getId() + "/picture?type=large";
             Picasso.get().load(profilePicUrl).into(imvUser);
             txtNameUser.setText(users.getName());
-            txtEmailUser.setText(users.getEmail());
-            Toast.makeText(this, users.getEmail() + users.getName(), Toast.LENGTH_SHORT).show();
+            //txtEmailUser.setText(users.getEmail());
+            //Toast.makeText(this, users.getEmail() + users.getName(), Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void getdata_tintuc() {
-        mDatabase.child("News").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                News news = dataSnapshot.getValue(News.class);
-                ListNews.add(news);
-                ListTinTuc.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 
     @Override
@@ -327,4 +450,193 @@ public class MainActivity2 extends AppCompatActivity
         return true;
     }
 
+    class ReadDataThanhNien extends AsyncTask<String, Integer, String> {
+
+        protected String doInBackground(String... strings) {
+            return docNoiDung_Tu_URL(strings[0]);
+        }
+
+        // vn express
+        protected void onPostExecute(String s) {
+            XMLDOMParser parser = new XMLDOMParser();
+            Document document = parser.getDocument(s);
+            NodeList nodeList = document.getElementsByTagName("item");
+            NodeList nodeList1Desciption = document.getElementsByTagName("description");
+            NodeList nodeListTitle = document.getElementsByTagName("title");
+            // NodeList nodeListLink = document.getElementsByTagName("link");
+            String title = "";
+            String link = "";
+            String hinhanh = "";
+            String NguonBao = nodeListTitle.item(1).getTextContent();
+            String Ngay = "";
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                String cdata = nodeList1Desciption.item(i + 1).getTextContent();
+                int flag = 0;
+//                Element line = (Element) nodeList1Desciption.item(i+1);
+//                String cdata = getCharacterDataFromElement(line);
+                Pattern p = Pattern.compile("<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>");
+                Pattern p1 = Pattern.compile("<img[^>]+data-original\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>");
+                Matcher matcher = p.matcher(cdata);
+                Matcher matcher1 = p1.matcher(cdata);
+                //Matcher matcher = Pattern.compile("<img src=\"([^\"]+)").matcher(getCharacterDataFromElement(line));
+
+                if (matcher1.find()) {
+                    hinhanh = matcher1.group(1);
+                    flag = 1;
+
+                }
+                if (matcher.find() && flag == 0) {
+
+                    hinhanh = matcher.group(1);
+                    //Log.d("hinhanh",hinhanh + ".........." +i);
+                }
+
+                Element element = (Element) nodeList.item(i);
+                title = nodeListTitle.item(i + 2).getTextContent();
+                link = parser.getValue(element, "link");
+                Ngay = parser.getValue(element, "pubDate");
+
+//                try {
+//                    NgayDang = FormatHelper.formatPubDate(Ngay.trim());
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+                Date NgayDang = FormatHelper.parseDate(Ngay);
+
+                //Toast.makeText(MainActivity.this, title, Toast.LENGTH_SHORT).show();
+                TinTuc tinTuc = new TinTuc(title, link, hinhanh, NguonBao, NgayDang);
+                lisTrungGian.add(tinTuc);
+
+            }
+            super.onPostExecute(s);
+
+        }
+    }
+
+    private String docNoiDung_Tu_URL(String theUrl) {
+        StringBuilder content = new StringBuilder();
+        try {
+            // create a url object
+            URL url = new URL(theUrl);
+
+            // create a urlconnection object
+            URLConnection urlConnection = url.openConnection();
+
+            // wrap the urlconnection in a bufferedreader
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+
+            String line;
+
+            // read from the urlconnection via the bufferedreader
+            while ((line = bufferedReader.readLine()) != null) {
+                content.append(line + "\n");
+            }
+            bufferedReader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return content.toString();
+    }
+
+    class ReadDataVNEpress extends AsyncTask<String, Integer, String> {
+
+        protected String doInBackground(String... strings) {
+            return docNoiDung_Tu_URL(strings[0]);
+        }
+
+        // vn express
+        protected void onPostExecute(String s) {
+            XMLDOMParser parser = new XMLDOMParser();
+            Document document = parser.getDocument(s);
+            NodeList nodeList = document.getElementsByTagName("item");
+            NodeList nodeList1Desciption = document.getElementsByTagName("description");
+            String title = "";
+            String link = "";
+            String hinhanh = "";
+            String nguonBao = "VnExpress";
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                String cdata = nodeList1Desciption.item(i + 1).getTextContent();
+                int flag = 0;
+                Element line = (Element) nodeList1Desciption.item(i + 1);
+                //String cdata = getCharacterDataFromElement(line);
+                Pattern p = Pattern.compile("<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>");
+                Pattern p1 = Pattern.compile("<img[^>]+data-original\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>");
+                Matcher matcher = p.matcher(cdata);
+                Matcher matcher1 = p1.matcher(cdata);
+                //Matcher matcher = Pattern.compile("<img src=\"([^\"]+)").matcher(getCharacterDataFromElement(line));
+
+                if (matcher1.find()) {
+                    hinhanh = matcher1.group(1);
+                    flag = 1;
+
+                }
+                if (matcher.find() && flag == 0) {
+
+                    hinhanh = matcher.group(1);
+                    //Log.d("hinhanh",hinhanh + ".........." +i);
+                }
+
+                Element element = (Element) nodeList.item(i);
+                title = parser.getValue(element, "title");
+                link = parser.getValue(element, "link");
+                TinTuc tinTuc = new TinTuc(title, link, hinhanh, nguonBao, null);
+                lisTrungGian.add(tinTuc);
+                //Toast.makeText(MainActivity.this, title, Toast.LENGTH_SHORT).show();
+//                TinTuc tinTuc = new TinTuc(title,link,hinhanh);
+//                listtin.add(docBao);
+
+            }
+            super.onPostExecute(s);
+
+        }
+    }
+
+    class ReadDataVietNamNet extends AsyncTask<String, Integer, String> {
+
+        protected String doInBackground(String... strings) {
+            return docNoiDung_Tu_URL(strings[0]);
+        }
+
+        // vn express
+        protected void onPostExecute(String s) {
+            XMLDOMParser parser = new XMLDOMParser();
+            Document document = parser.getDocument(s);
+            NodeList nodeList = document.getElementsByTagName("item");
+            NodeList nodeList1Desciption = document.getElementsByTagName("description");
+            String title = "";
+            String link = "";
+            String hinhanh = "";
+            String nguonbao = "Vietnamnet";
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                String cdata = nodeList1Desciption.item(i + 1).getTextContent();
+                int flag = 0;
+                Element line = (Element) nodeList1Desciption.item(i + 1);
+                Pattern p = Pattern.compile("<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>");
+                Pattern p1 = Pattern.compile("<img[^>]+data-original\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>");
+                Matcher matcher = p.matcher(cdata);
+                Matcher matcher1 = p1.matcher(cdata);
+                //Matcher matcher = Pattern.compile("<img src=\"([^\"]+)").matcher(getCharacterDataFromElement(line));
+
+                if (matcher1.find()) {
+                    hinhanh = matcher1.group(1);
+                    flag = 1;
+
+                }
+                if (matcher.find() && flag == 0) {
+
+                    hinhanh = matcher.group(1);
+                    //Log.d("hinhanh",hinhanh + ".........." +i);
+                }
+
+                Element element = (Element) nodeList.item(i);
+                title = parser.getValue(element, "title");
+                link = parser.getValue(element, "link");
+                TinTuc tinTuc = new TinTuc(title, link, hinhanh, nguonbao, null);
+                lisTrungGian.add(tinTuc);
+
+            }
+            super.onPostExecute(s);
+
+        }
+    }
 }
