@@ -18,7 +18,9 @@ public class ChonChuyenMuc extends AppCompatActivity {
             actionBar.setTitle(getResources().getString(R.string.app_name));
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        String abc = "abc"
     }
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
